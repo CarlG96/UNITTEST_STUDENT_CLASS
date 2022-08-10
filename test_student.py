@@ -1,7 +1,7 @@
 import unittest
 from datetime import date, timedelta
 from student import Student
-
+from unittest.mock import patch
 
 class TestStudent(unittest.TestCase):
 
@@ -36,6 +36,21 @@ class TestStudent(unittest.TestCase):
     def test_apply_extension(self):
         print('test apply extension')
         self.assertTrue(self.student.apply_extension(30), self.student.end_date > self.student._start_date + timedelta(days=365))
+    
+    def test_course_schedule_success(self):
+        with patch('student.requests.get') as mocked_get:
+            mocked_get.return_value.ok = True
+            mocked_get.return_value.text = "Success!"
+
+            schedule = self.student.course_schedule()
+            self.assertEqual(schedule, "Success!")
+    
+    def test_course_schedule_failure(self):
+        with patch("student.requests.get") as mocked_get:
+            mocked_get.return_value.ok = False
+
+            schedule = self.student.course_schedule()
+            self.assertEqual(schedule, "Something went wrong")
 
 if __name__ == '__main__':
     unittest.main()
