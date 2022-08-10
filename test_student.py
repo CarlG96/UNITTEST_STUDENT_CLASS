@@ -1,4 +1,5 @@
 import unittest
+from datetime import date, timedelta
 from student import Student
 
 
@@ -31,6 +32,10 @@ class TestStudent(unittest.TestCase):
     def test_email(self):
         print('test email')
         self.assertTrue(self.student.email, 'john.smith@email.com')
+
+    def test_apply_extension(self):
+        print('test apply extension')
+        self.assertTrue(self.student.apply_extension(30), self.student.end_date > self.student._start_date + timedelta(days=365))
 
 if __name__ == '__main__':
     unittest.main()
